@@ -37,7 +37,8 @@ SELECT src:ResponseMetadata:HTTPHeaders:date::string as date
 CREATE OR REPLACE TABLE aws_cost_details_by_time AS
 SELECT
   results.value:TimePeriod:Start::date as start_dt,
-  groups.value:Keys as keys,
+  groups.value:Keys[0]::string as service,
+  groups.value:Keys[1]::string as usage_type,
   groups.value:Metrics:AmortizedCost:Amount::string as cost,
   groups.value:Metrics:AmortizedCost:Unit::string as unit,
   results.value:TimePeriod:End::date as end_dt
@@ -47,5 +48,14 @@ FROM
     LATERAL FLATTEN( INPUT => results.value, PATH => 'Groups') AS groups
 ORDER BY start_dt;
 
-SELECT * FROM aws_cost_details_by_time;
+SELECT keys[0] FROM aws_cost_details_by_time;
+
+-- Aggregate by service
+SELECT service, sum(cost)
+FROM aws_cost_details_by_time
+GROUP BY service;
+
+-- Aggregate by month
+
+-- Aggregate by week
 
