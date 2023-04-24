@@ -1,3 +1,15 @@
+
+
+## Future 
+* Connect using PowerBI
+* More interesting aggregations
+* Tie up AWS stuff, make it regular
+* Deploy DBT job to run regularly
+* Document and clean up code
+
+### AWS stuff
+
+TODO terraform
 snowflake_role trust 
 {
     "Version": "2012-10-17",
@@ -50,3 +62,4 @@ snowflake_policy
         }
     ]
 }
+
