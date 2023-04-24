@@ -2,6 +2,17 @@ import boto3
 from datetime import datetime, timedelta
 
 
+'''
+This file contains code that will extract detailed AWS cost data and write it to S3
+
+Pre-req
+1. configure aws account to have access to cost explorer
+2. Delete access to the billing console to IAM users
+https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_billing.html
+(the IAM user will have to sign out and sign back in.  It seems to take immediate effect.)
+
+'''
+
 def get_daily_cost_detail(start_date, end_date, dimensions) :
     print(f'Start get_daily_cost_detail for {start_date} {end_date} {dimensions}')
     client = boto3.client('ce', 'us-east-1')
@@ -60,6 +71,7 @@ def write_to_s3(filename, body) :
 filename = f'{start_date.strftime("%Y%m%d")}-{end_date.strftime("%Y%m%d")}'
 write_to_s3(filename, response)
 
-
+# TODO terraform for S3
+# TODO refactor
 
 
