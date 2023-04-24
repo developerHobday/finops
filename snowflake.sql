@@ -4,6 +4,13 @@ CREATE OR REPLACE TABLE aws_cost_raw (
   src variant
 );
 
+CREATE ROLE transform_role;
+grant usage on database finops to role transform_role;
+grant usage on all schemas in database finops to role transform_role;
+grant select on all tables in database finops to role transform_role;
+grant select on all views in database finops to role transform_role;
+grant all on database analytics to role transform_role;
+
 CREATE STORAGE INTEGRATION aws_s3_integration
   TYPE = EXTERNAL_STAGE
   STORAGE_PROVIDER = 'S3'

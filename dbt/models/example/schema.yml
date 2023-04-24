@@ -1,0 +1,27 @@
+
+version: 2
+
+models:
+  - name: date_dimension
+    columns:
+      - name: date
+      - name: year
+      - name: month
+      - name:  month_name
+      - name:  day
+      - name:  day_of_week
+      - name:  week_of_year
+      - name:  day_of_year
+
+  - name: aws_cost_by_week
+    description: "AWS costs aggregated by week"
+    columns:
+      - name: week_of_year
+      - name: year
+      - name: cost
+
+  - name: aws_cost_by_service
+    description: "AWS costs aggregated by service"
+    columns:
+      - name: service
+      - name: cost
