@@ -1,10 +1,15 @@
-name: scheduled_run
+name: dbt
 
 on:
+  workflow_dispatch:
   schedule:
     - cron:  '0 5 * * *'
+#   push:
+#     branches:
+#       - main
+
 env:
-  DBT_PROFILES_DIR: dbt
+  DBT_PROFILES_DIR: ./
 
   # https://docs.github.com/en/actions/security-guides/encrypted-secrets  
   PRD_SNOWFLAKE_ACCOUNT: ${{ secrets.PRD_SNOWFLAKE_ACCOUNT }}
@@ -13,19 +18,16 @@ env:
   PRD_SNOWFLAKE_ROLE: ${{ secrets.PRD_SNOWFLAKE_ROLE }}
   PRD_SNOWFLAKE_WAREHOUSE: ${{ secrets.PRD_SNOWFLAKE_WAREHOUSE }}
 
-# on:
-#   push:
-#     branches:
-#       - main
-
 jobs:
-  scheduled_run:
-    name: scheduled_run
+  dbt:
+    name: dbt
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./dbt
     steps:
       - name: Check out
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
 
       - uses: actions/setup-python@v1
         with:
@@ -33,7 +35,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install dbt
+          pip install dbt-core dbt-snowflake
           dbt deps --target prod
       
       - name: Run dbt models
