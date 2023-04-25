@@ -1,0 +1,28 @@
+finops:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: bib76405.us-east-1
+
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+
+      role: transform_role
+      warehouse: transform_wh
+      schema: finops
+      threads: 1
+      client_session_keep_alive: False
+
+    prod:
+      type: snowflake
+      account: bib76405.us-east-1
+
+      user: "{{ env_var('PRD_SNOWFLAKE_USER') }}"
+      password: "{{ env_var('PRD_SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('PRD_SNOWFLAKE_ROLE') }}"
+      warehouse: "{{ env_var('PRD_SNOWFLAKE_WAREHOUSE') }}"
+      database: analytics
+      schema: finops
+      threads: 1
+      client_session_keep_alive: False

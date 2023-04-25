@@ -1,4 +1,4 @@
-CREATE OR REPLACE DATABASE finops;
+CREATE OR REPLACE DATABASE finops; -- TODO use database raw?
 USE SCHEMA finops.public;
 CREATE OR REPLACE TABLE aws_cost_raw (
   src variant
@@ -9,7 +9,7 @@ grant usage on database finops to role transform_role;
 grant usage on all schemas in database finops to role transform_role;
 grant select on all tables in database finops to role transform_role;
 grant select on all views in database finops to role transform_role;
-grant all on database analytics to role transform_role;
+
 
 CREATE STORAGE INTEGRATION aws_s3_integration
   TYPE = EXTERNAL_STAGE
@@ -66,3 +66,8 @@ GROUP BY service;
 
 -- Aggregate by week
 
+
+CREATE OR REPLACE DATABASE analytics_dev;
+GRANT all ON DATABASE analytics_dev TO ROLE transform_role;
+GRANT usage ON DATABASE analytics_dev TO ROLE transform_role;
+GRANT usage ON all schemas IN DATABASE analytics_dev TO ROLE transform_role;

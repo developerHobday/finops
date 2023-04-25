@@ -1,0 +1,43 @@
+name: scheduled_run
+
+on:
+  schedule:
+    - cron:  '0 5 * * *'
+env:
+  DBT_PROFILES_DIR: dbt
+
+  # https://docs.github.com/en/actions/security-guides/encrypted-secrets  
+  PRD_SNOWFLAKE_ACCOUNT: ${{ secrets.PRD_SNOWFLAKE_ACCOUNT }}
+  PRD_SNOWFLAKE_USER: ${{ secrets.PRD_SNOWFLAKE_USER }}
+  PRD_SNOWFLAKE_PASSWORD: ${{ secrets.PRD_SNOWFLAKE_PASSWORD }}
+  PRD_SNOWFLAKE_ROLE: ${{ secrets.PRD_SNOWFLAKE_ROLE }}
+  PRD_SNOWFLAKE_WAREHOUSE: ${{ secrets.PRD_SNOWFLAKE_WAREHOUSE }}
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+jobs:
+  scheduled_run:
+    name: scheduled_run
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@master
+
+      - uses: actions/setup-python@v1
+        with:
+          python-version: "3.7.x"
+
+      - name: Install dependencies
+        run: |
+          pip install dbt
+          dbt deps --target prod
+      
+      - name: Run dbt models
+        run: dbt run --target prod
+
+      - name: Test dbt models
+        run: dbt test --target prod

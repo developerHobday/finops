@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH date_generator AS (
 
     SELECT DATEADD(DAY, SEQ4(), '2000-01-01') AS date
@@ -16,4 +14,3 @@ select
     WEEKOFYEAR(date) AS week_of_year,
     DAYOFYEAR(date) AS day_of_year
 from date_generator
-
