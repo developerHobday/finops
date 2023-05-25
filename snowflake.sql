@@ -71,3 +71,7 @@ CREATE OR REPLACE DATABASE analytics_dev;
 GRANT all ON DATABASE analytics_dev TO ROLE transform_role;
 GRANT usage ON DATABASE analytics_dev TO ROLE transform_role;
 GRANT usage ON all schemas IN DATABASE analytics_dev TO ROLE transform_role;
+
+CREATE ROLE analyst;
+GRANT USAGE ON DATABASE analytics TO ROLE analyst;
+GRANT USAGE ON WAREHOUSE compute_wh TO ROLE analyst;

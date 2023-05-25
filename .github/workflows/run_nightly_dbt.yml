@@ -2,6 +2,8 @@ name: dbt
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron:  '0 20 * * *'
 
 env:
   DBT_PROFILES_DIR: ./
@@ -34,7 +36,7 @@ jobs:
           dbt deps --target prod
       
       - name: Run dbt models
-        run: dbt run --target prod
+        run: dbt run --target prod -m tag:nightly
 
       - name: Test dbt models
-        run: dbt test --target prod
+        run: dbt test --target prod -m tag:nightly

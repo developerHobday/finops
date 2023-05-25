@@ -1,5 +1,6 @@
-WITH date_generator AS (
+{{ config(tags="adhoc") }}
 
+WITH date_generator AS (
     SELECT DATEADD(DAY, SEQ4(), '2000-01-01') AS date
     FROM TABLE(GENERATOR(ROWCOUNT=>10000))
 )

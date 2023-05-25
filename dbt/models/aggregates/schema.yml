@@ -25,3 +25,13 @@ models:
     columns:
       - name: service
       - name: cost
+
+sources:
+  - name: raw
+    database: finops
+    schema: public
+    tables:
+      - name: aws_cost_raw
+        columns:
+          - name: src
+            description: The json response from AWS cost explorer sdk

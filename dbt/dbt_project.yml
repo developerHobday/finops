@@ -24,19 +24,26 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_modules"
 
+on-run-start:
+  - "CREATE TABLE IF NOT EXISTS AUDIT (model TEXT, state TEXT, time TIMESTAMP_LTZ)"
 
-# Configuring models
+on-run-end:
+  - 'GRANT USAGE ON SCHEMA analytics.enterprise to ROLE analyst'
+  - 'GRANT SELECT ON ALL TABLES IN SCHEMA analytics.enterprise to ROLE analyst'
+  - 'GRANT SELECT ON ALL VIEWS IN SCHEMA analytics.enterprise to ROLE analyst'
+
+
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
-
-# In this example config, we tell dbt to build all models in the example/ directory
-# as tables. These settings can be overridden in the individual model files
-# using the `{{ config(...) }}` macro.
 models:
   finops_project:
     # Config indicated by + and applies to all files under models/example/
     aggregates:
       +materialized: table
       +schema: enterprise
+      tags: nightly
     enterprise:
       +materialized: table
-      +schema: finops  
+      +schema: finops
+    pre-hook: |
+      INSERT INTO audit(model, state, time) 
+      VALUES('{{this.name}}', 'start', current_timestamp)
